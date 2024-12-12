@@ -214,7 +214,10 @@ def historical_decisions_app():
         if st.button("Enviar Decisión", key=f'decision_{st.session_state.current_scenario}'):  
             st.session_state.consequences.append(f"Decidiste: {decision}")
             st.session_state.current_scenario += 1
-            st.experimental_rerun()
+            try:
+                st.experimental_rerun()
+            except Exception as e:
+                st.error(f"Error al reiniciar la aplicación: {e}")
     else:
         st.success("¡Has completado el simulador de decisiones históricas!")
         st.write("### Consecuencias de tus decisiones:")
