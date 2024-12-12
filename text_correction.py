@@ -1,4 +1,24 @@
 import streamlit as st
+import requests
+
+# Función para llamar a la API de X.AI
+def call_xai_api(user_message):
+    url = "https://api.x.ai/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + st.secrets["general"]["api_key"]
+    }
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_message}
+        ],
+        "model": "grok-beta",
+        "stream": False,
+        "temperature": 0.7
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
 
 # Función para el asistente de corrección de textos
 def text_correction_app():
@@ -11,23 +31,6 @@ def text_correction_app():
         if user_text:
             st.write("### Correcciones y Explicaciones:")
             
-            # Ejemplo de correcciones (en una app real, esto usaría un servicio NLP apropiado)
-            corrections = [
-                {
-                    "original": "haber",
-                    "correction": "a ver",
-                    "explanation": "Se usa 'a ver' cuando queremos expresar el acto de mirar o examinar algo."
-                },
-                {
-                    "original": "hay",
-                    "correction": "ahí",
-                    "explanation": "Se usa 'ahí' para indicar lugar, mientras que 'hay' es una forma del verbo haber."
-                }
-            ]
-            
-            for corr in corrections:
-                st.write(f"**Original:** {corr['original']}")
-                st.write(f"**Corrección:** {corr['correction']}")
-                st.write(f"_Explicación:_ {corr['explanation']}")
-                st.write("---")
-
+            # Llamar a la API de X.AI para obtener correcciones
+            api_response = call_xai_api(user_text)
+            st.write(api_response)  # Mostrar la respuesta de la API

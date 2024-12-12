@@ -1,4 +1,24 @@
 import streamlit as st
+import requests
+
+# Función para llamar a la API de X.AI
+def call_xai_api(user_message):
+    url = "https://api.x.ai/v1/chat/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + st.secrets["general"]["api_key"]
+    }
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_message}
+        ],
+        "model": "grok-beta",
+        "stream": False,
+        "temperature": 0.7
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
 
 # Función para el simulador de decisiones históricas
 def historical_decisions_app():
