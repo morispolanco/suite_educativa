@@ -75,7 +75,10 @@ def critical_thinking_app():
         
         if st.button("¡Sí, comencemos!"):
             st.session_state.chat_started = True
-            st.experimental_rerun()
+            try:
+                st.experimental_rerun()
+            except Exception as e:
+                st.error(f"Error al reiniciar la aplicación: {e}")
     
     # Mostrar ejercicios
     elif st.session_state.current_exercise < len(exercises):
@@ -92,6 +95,11 @@ def critical_thinking_app():
                 if user_response:
                     st.session_state.user_responses.append(user_response)
                     st.success("¡Gracias por tu análisis! Ahora puedes ver la retroalimentación.")
+                    
+                    try:
+                        st.experimental_rerun()
+                    except Exception as e:
+                        st.error(f"Error al reiniciar la aplicación: {e}")
         
         with col2:
             if st.button("Ver Retroalimentación"):
@@ -103,7 +111,10 @@ def critical_thinking_app():
                     
                     if st.button("Siguiente Ejercicio"):
                         st.session_state.current_exercise += 1
-                        st.experimental_rerun()
+                        try:
+                            st.experimental_rerun()
+                        except Exception as e:
+                            st.error(f"Error al reiniciar la aplicación: {e}")
                 else:
                     st.warning("Por favor, envía tu análisis primero.")
     
@@ -113,6 +124,9 @@ def critical_thinking_app():
             st.session_state.chat_started = False
             st.session_state.current_exercise = 0
             st.session_state.user_responses = []
-            st.experimental_rerun()
+            try:
+                st.experimental_rerun()
+            except Exception as e:
+                st.error(f"Error al reiniciar la aplicación: {e}")
 
 critical_thinking_app()
